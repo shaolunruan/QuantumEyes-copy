@@ -60,7 +60,7 @@ function App() {
     // 控制 选择的算法
     // const [param_algo, setAlgo] = useState('qiskit_grover_2q')
     // const [param_algo, setAlgo] = useState('grover_n2_QASMBench') // 默认值
-    const [param_algo, setAlgo] = useState(null) // 默认值 
+    const [param_algo, setAlgo] = useState(null) // 默认值
     // const [param_algo, setAlgo] = useState(null)
     const [theta, setTheta] = useState(1)
     const [theta_point, setTheta_point] = useState(1)
@@ -136,7 +136,7 @@ function App() {
                             className="github-icon"
                         />
                         <div className="github-text">
-                            <a href="https://github.com/your-repo" target="_blank">
+                            <a href="https://github.com/shaolunruan/QuantumEyes-copy" target="_blank">
                                 QuantumEyes
                             </a>
                         </div>
@@ -150,7 +150,7 @@ function App() {
                             className="npm-icon"
                         />
                         <div className="npm-text">
-                            <a href="https://github.com/your-repo" target="_blank">
+                            <a href="https://www.npmjs.com/package/dandelion_chart" target="_blank">
                                 Dandelion
                             </a>
                         </div>
