@@ -10,6 +10,14 @@ html, body{
   /*background: #ffffff;*/
 }
 
+.centered{
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .ant-layout{
   background: #EDF0F4;
   /*background: #ffffff;*/
@@ -24,7 +32,7 @@ html, body{
 
 .system-title{
   color: #d8d8d8;
-  font-size: 1.3em;
+  font-size: 1.15em;
   margin-left: 10px;
   font-family: Bahnschrift SemiBold;
 }
@@ -32,28 +40,32 @@ html, body{
 
 .paper-title{
   color: #8e8e8e;
-  font-size: 1em;
+  font-size: 1.1em;
   font-style: italic;
-  float: right;
+  /*float: left;*/
 }
 
 .component{
-  border: solid 1px #ffffff;
+  /*border: solid 1px #ffffff;*/
   border-radius: 10px;
   padding: 15px;
-  background: #ffffff;
 }
 
 .view2_axisBottom{
-  font-size: 0.8em;
+  font-size: 0.7em;
 }
 
-.view4_axisBottom{
-  font-size: 0.8em;
-}
+/*.view4_axisBottom{*/
+/*  font-size: 0.8em;*/
+/*}*/
 
 .ant-layout-header{
   padding: 0;
+}
+
+.spaceholder{
+  font-size: 1.2em;
+  color: #6b6b6b
 }
 
 
@@ -69,7 +81,7 @@ html, body{
 }
 
 .view_title_text{
-  font-size: 2em;
+  font-size: 1.5em;
   fill: #4b4b4b;
   font-weight: bold;
 }
@@ -95,9 +107,94 @@ html, body{
 
 #path_animation_dandelion{
   -webkit-animation: dash 50s linear infinite;
-  stroke-dasharray: 12 3;
+  stroke-dasharray: 8 3;
 
 }
+
+.linkLogos{
+  width: 325px;
+  align-items: center;
+  justify-content: space-between;
+  display: inline-flex;
+  margin-right: 60px;
+  float: right;
+}
+
+
+.github-block {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #1c1c1c; /* Dark grey block background */
+  border: 1px solid #484848; /* Border for styling */
+  border-radius: 8px;
+  padding-left: 10px;
+  padding-right: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  transition: transform 0.15s ease-in-out;
+  width: 165px;
+  height: 50px;
+  cursor: pointer;
+}
+
+
+
+.npm-block {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #1c1c1c; /* Dark grey block background */
+  border: 1px solid #484848; /* Border for styling */
+  border-radius: 8px;
+  padding-left: 10px;
+  padding-right: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  transition: transform 0.15s ease-in-out;
+  width: 145px;
+  height: 50px;
+  cursor: pointer;
+}
+
+.github-block:hover {
+  transform: scale(1.05); /* Slight zoom on hover */
+}
+
+.npm-block:hover {
+  transform: scale(1.05); /* Slight zoom on hover */
+}
+
+.github-icon {
+  width: 40px;
+  /*margin-right: 15px;*/
+}
+
+.npm-icon {
+  width: 40px;
+  margin-right: 8px;
+  /*margin-right: 15px;*/
+}
+
+.github-text {
+  font-size: 0.9em;
+  font-weight: bold;
+}
+
+.npm-text {
+  font-size: 0.9em;
+  font-weight: bold;
+  /*margin-right: 20px;*/
+}
+
+.github-text a {
+  text-decoration: none;
+  color: #fff; /* GitHub blue for links */
+}
+
+.npm-text a {
+  text-decoration: none;
+  color: #ffffff; /* GitHub blue for links */
+}
+
 
 .dandelion_div{
   border: solid 2px #6c6c6c;
@@ -110,4 +207,18 @@ html, body{
 
 label{
   font-size: 15px;
+}
+
+.dandelion-appear {
+  opacity: 0;
+  animation: fadeIn 0.35s ease 0.1s forwards;
+}
+
+.view2-appear {
+  opacity: 0;
+  animation: fadeIn 0.35s ease 0.1s forwards;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
 }

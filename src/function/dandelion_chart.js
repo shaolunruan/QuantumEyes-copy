@@ -3,7 +3,11 @@ import {colorMap_circle_fill, colorMap_circle_border, colorMap_point} from "./vi
 import {state_dark, state_light, state_Light} from "./color_scheme";
 
 
-function dandelion_chart(state_vectors_, states, bundle_g_, size_arr_, position_arr_, theta_){
+function dandelion_chart(state_vectors_,
+                         states,
+                         [bundle_g_, size_arr_, position_arr_, point_radius_=8],
+                         [theta_=1, theta_point_=1]
+){
 
 
     ////////////////////////// 检查参数 ////////////////////////////////
@@ -78,9 +82,11 @@ function dandelion_chart(state_vectors_, states, bundle_g_, size_arr_, position_
 
     // 实际的圆心关于 state 点的偏置
     let theta = theta_ || 1// theta是缩小半径 r 的参数
+    let theta_point = theta_point_ || 1// theta是缩小半径 r 的参数
     let opacity = 0.8
-    let point_r = 8
 
+    let point_radius = point_radius_
+    let radius_reduce_value = point_radius*(3/8)
 
 
 
@@ -147,7 +153,7 @@ function dandelion_chart(state_vectors_, states, bundle_g_, size_arr_, position_
         return
     }
 
-    const view_data = all_possible_states.map((d,i)=>{
+    const view_data_ = all_possible_states.map((d,i)=>{
         let obj = {}
 
         obj['name'] = d
@@ -155,6 +161,48 @@ function dandelion_chart(state_vectors_, states, bundle_g_, size_arr_, position_
 
         return obj
     })
+
+
+    //处理 数据源 对每一个元素生成point—radius
+    let view_data_copy = view_data_
+    let view_data = view_data_.map(d=>{
+
+        // 这个函数的作用就是统计已经有多少个同位置的元素被渲染了, 生成一个像是同心圆的东西
+        let number = 0
+
+        view_data_copy.every(ele=>{
+            if(ele.state_vector.toString()==d.state_vector.toString() && ele.name != d.name){
+                number = number + 1
+                return true
+            }
+
+
+            if(ele.name == d.name){
+                return false
+            }
+
+            return true
+        })
+
+        // console.log('number', number);
+        // console.log('r', point_r - number*2);
+
+
+        if(d['state_vector'][0]==0 && d['state_vector'][1]==0){
+            return {
+                ...d,
+                point_radius: 0
+            }
+        }
+        // console.log(number);
+
+        return {
+            ...d,
+            point_radius: (point_radius-number*radius_reduce_value)*theta_point
+        }
+    })
+
+    // console.log(view_data);
 
 
 
@@ -313,17 +361,55 @@ function dandelion_chart(state_vectors_, states, bundle_g_, size_arr_, position_
 
 
 
+    // console.log(view_data);
 
 
     // 代表 state 的 point
     let points = state_g.append('circle')
         .attr('id', `view3_point`)
-        .attr("r", point_r)
+        .attr("r", d=>{
+
+            // console.log(d)
+            //
+            // // 这个函数的作用就是统计已经有多少个同位置的元素被渲染了, 生成一个像是同心圆的东西
+            // let number = 0
+            //
+            // view_data.every(ele=>{
+            //     if(ele.state_vector.toString()==d.state_vector.toString() && ele.name != d.name){
+            //         number = number + 1
+            //         return true
+            //     }
+            //
+            //
+            //     if(ele.name == d.name){
+            //         return false
+            //     }
+            //
+            //     return true
+            // })
+
+            // console.log('number', number);
+            // console.log('r', point_r - number*2);
+
+
+            // if(d['state_vector'][0]==0 && d['state_vector'][1]==0){
+            //     return 0
+            // }
+
+            // return point_r - number*3
+            return d['point_radius']
+        })
         .attr("cx", 0)
         .attr("cy", 0)
-        // .style("stroke", "#7a0099")
-        // .style("stroke-width", 1)
         .style("fill", (d,i)=>state_dark[d['name']])
+        .style('stroke', '#fff')
+        .style('stroke-width', 1)
+    // .attr('class', d=>`${d['state_vector'][0]}_${d['state_vector'][1]}`)
+    // .each(d=>{
+    //     console.log(d);
+    // })
+
+
 
 
 
@@ -348,13 +434,6 @@ function dandelion_chart(state_vectors_, states, bundle_g_, size_arr_, position_
         .attr("text-anchor", "middle")
         .style("font-size", "16px")
         .html(d=>`|${ d['name']}&#x27E9: ${d['state_vector']}`)
-
-
-
-
-
-
-
 
 
 

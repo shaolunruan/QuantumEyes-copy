@@ -11,6 +11,9 @@ function OriginCircuit(props){
 
     const param_algo = props.param_algo
 
+    let circuit_width = props.circuit_width
+    let circuit_height = props.circuit_height
+
 
 
 
@@ -26,17 +29,16 @@ function OriginCircuit(props){
     function draw_originalCircuit(data){
 
 
-        const svg_width = 1200, svg_height = 180
-        const view4_margin_top = 0, view4_margin_bottom = 70, view4_margin_left = 10
-        const view4_padding_top = -12, view4_padding_left_right = 30
-        const view4_padding_bottom = 20
-        const view4_title_height = 40
-        const gate_circle_radius = 12
+        const svg_width = circuit_width, svg_height = circuit_height
+        const view4_padding_top = 10, view4_padding_left = 40
+        const view4_margin_top = 0, view4_margin_bottom = 30, view4_margin_left = 0, view4_margin_right = 20
+        const view4_title_height = 22
+        const gate_circle_radius = 10
 
 
 
         // 定义一些颜色
-        const view2_bgColor_0 = '#f5f5f5', view2_bgColor_1 = '#ffffff'// view2 的背景两种相间的颜色
+        const view2_bgColor_0 = '#f8f8f8', view2_bgColor_1 = '#ffffff'// view2 的背景两种相间的颜色
 
 
 
@@ -46,40 +48,41 @@ function OriginCircuit(props){
         ///////////// 画 Original Circuit ////////////
 
 
-        // 生成数据
-        let view4_data = Object.values(data).map((d,i)=>{
+        // // 生成数据
+        // let view4_data = Object.values(data).map((d,i)=>{
+        //
+        //     if(i==Object.keys(data).length-1){
+        //        return
+        //     }
+        //
+        //
+        //     let block_num = i
+        //     let block_name = `block${i}`
+        //
+        //     let operation_arr = []
+        //
+        //     Object.values(d).forEach(_d=>{
+        //         let qubit_obj = {}
+        //
+        //
+        //         qubit_obj['gate'] = _d['hubs']['statehub0']['states']['state0']['post_gate']
+        //         qubit_obj['qubit']  = _d['hubs']['statehub0']['states']['state0']['act_on']
+        //
+        //         operation_arr.push(qubit_obj)
+        //     })
+        //
+        //
+        //     return {
+        //         'block_num': block_num,
+        //         'block_name': block_name,
+        //         'operation': operation_arr
+        //     }
+        //
+        // }).filter(d=>d)//把最后一个元素undifined去除，因为最后一个state素没有gate的信息
 
-            if(i==Object.keys(data).length-1){
-               return
-            }
+    let view4_data = data
 
-
-            let block_num = i
-            let block_name = `block${i}`
-
-            let operation_arr = []
-
-            Object.values(d).forEach(_d=>{
-                let qubit_obj = {}
-
-
-                qubit_obj['gate'] = _d['hubs']['statehub0']['states']['state0']['post_gate']
-                qubit_obj['qubit']  = _d['hubs']['statehub0']['states']['state0']['act_on']
-
-                operation_arr.push(qubit_obj)
-            })
-
-
-            return {
-                'block_num': block_num,
-                'block_name': block_name,
-                'operation': operation_arr
-            }
-
-        }).filter(d=>d)//把最后一个元素undifined去除，因为最后一个state素没有gate的信息
-
-
-
+        console.log(view4_data)
 
         // 遍历所有的qubit，数一共有几种不同的qubit
         let qubit_arr = view4_data.reduce((qubit_arr, d)=>{
@@ -97,9 +100,10 @@ function OriginCircuit(props){
 
 
 
-        const content_width = svg_width - 2*view4_padding_left_right - 2*view4_margin_left
-        const content_height = svg_height - view4_padding_bottom - view4_padding_top - view4_margin_top - view4_margin_bottom
+        const content_width = svg_width - 2*view4_padding_left - view4_margin_left - view4_margin_right
+        const content_height = svg_height- view4_padding_top - view4_margin_top - view4_margin_bottom
 
+        // const wire_height = content_height / qubit_arr.length
         const wire_height = content_height / qubit_arr.length
         const block_width = content_width / Object.keys(view4_data).length
 
@@ -129,7 +133,7 @@ function OriginCircuit(props){
 
 
         let content_g = view4.append('g')
-            .attr('transform', `translate(${view4_padding_left_right}, ${view4_padding_top+view4_title_height})`)
+            .attr('transform', `translate(${view4_padding_left}, ${view4_padding_top+view4_title_height})`)
             .attr('class', 'view4_content')
 
 
@@ -180,8 +184,8 @@ function OriginCircuit(props){
         // 最左侧的q0，q1...
         wire_g.append('text')
             .html(d=>`q_${d}`)
-            .attr('transform', (d,i)=>`translate(${-40}, ${wire_height/2})`)
-            .style('font-size', '1.5em')
+            .attr('transform', (d,i)=>`translate(${-30}, ${wire_height/2})`)
+            .style('font-size', '1em')
             .style('fill', '#3d3d3d')
 
 
@@ -201,40 +205,158 @@ function OriginCircuit(props){
 
 
 
+        // let gates = block_g.selectAll('.null')
+        //     .data(d=>d['operation'])
+        //     .join('g')
+        //     .attr('class', 'gate_g')
+        //     .attr('transform', (d,i)=>{
+        //         return `translate(${0}, ${(qubit_num-1-d['qubit'])*wire_height+wire_height/2})`
+        //     })
+        //
+        //
+        //
+        //
+        //
+        //
+        // gates.append('rect')
+        //     .attr('x', block_width/2 - gate_circle_radius)
+        //     .attr('y', -gate_circle_radius)
+        //     .attr("width", gate_circle_radius*2)
+        //     .attr("height", gate_circle_radius*2)
+        //     .attr('rx', 3)
+        //     .style("stroke", "#366494")
+        //     .style("stroke-width", 2)
+        //     .style("fill", "#ffffff")
+        //
+        //
+        //
+        //
+        //
+        //
+        // gates.append('text')
+        //     .html(d=>d['gate'])
+        //     .attr('transform', `translate(${block_width/2}, ${gate_circle_radius/2})`)
+        //     .style('font-size', '0.85em')
+        //     .style('font-weight', 1000)
+        //     .style('font-style', 'italic')
+        //     .style('text-anchor', 'middle')
+        //     .style('fill', "#366494")
+
         let gates = block_g.selectAll('.null')
-            .data(d=>d['operation'])
+            .data(d => d['operation'])
             .join('g')
             .attr('class', 'gate_g')
-            .attr('transform', (d,i)=>{
-                return `translate(${0}, ${(qubit_num-1-i)*wire_height+wire_height/2})`
-            })
+            .attr('transform', (d, i) => {
+                if (typeof d['qubit'] === 'string') {
+                    const [a, b] = d['qubit'].split('-').map(Number);
+                    return `translate(${0}, ${0})`;
+                }
+                return `translate(${0}, ${0})`;
+            });
+
+// Handle 'cp' and 's' gates
+        gates.each(function (d) {
+            const gateGroup = d3.select(this);
+
+            if ((d['gate'] === 'cp' || d['gate'] === 'cx') && typeof d['qubit'] === 'string') {
+                const [a, b] = d['qubit'].split('-').map(Number);
+
+                // Draw line from position a to b
+                gateGroup.append('line')
+                    .attr('x1', block_width / 2)
+                    .attr('y1', (qubit_num - 1 - a) * wire_height + wire_height / 2)
+                    .attr('x2', block_width / 2)
+                    .attr('y2', (qubit_num - 1 - b) * wire_height + wire_height / 2)
+                    .style('stroke', '#366494')
+                    .style('stroke-width', 2);
+
+                // Draw hollow dot at position a
+                gateGroup.append('circle')
+                    .attr('cx', block_width / 2)
+                    .attr('cy', (qubit_num - 1 - a) * wire_height + wire_height / 2)
+                    .attr('r', gate_circle_radius / 3)
+                    .style('fill', '#ffffff')
+                    .style('stroke', '#366494')
+                    .style('stroke-width', 2);
+
+                // Draw as-is symbol at position b
+                gateGroup.append('rect')
+                    .attr('x', block_width / 2 - gate_circle_radius)
+                    .attr('y', (qubit_num - 1 - b) * wire_height + wire_height / 2 - gate_circle_radius)
+                    .attr("width", gate_circle_radius * 2)
+                    .attr("height", gate_circle_radius * 2)
+                    .attr('rx', 3)
+                    .style("stroke", "#366494")
+                    .style("stroke-width", 2)
+                    .style("fill", "#ffffff");
+
+                gateGroup.append('text')
+                    .html(d => d['gate'])
+                    .attr('transform', `translate(${block_width / 2}, ${(qubit_num - 1 - b) * wire_height + wire_height / 2 +3})`)
+                    .style('font-size', '0.85em')
+                    .style('font-weight', 1000)
+                    .style('font-style', 'italic')
+                    .style('text-anchor', 'middle')
+                    .style('fill', "#366494");
+            } else
+
+                if (d['gate'] === 's' && typeof d['qubit'] === 'string') {
 
 
+                const [a, b] = d['qubit'].split('-').map(Number);
 
+                    gateGroup.append('line')
+                        .attr('x1', block_width / 2)
+                        .attr('y1', (qubit_num - 1 - a) * wire_height + wire_height / 2)
+                        .attr('x2', block_width / 2)
+                        .attr('y2', (qubit_num - 1 - b) * wire_height + wire_height / 2)
+                        .style('stroke', '#366494')
+                        .style('stroke-width', 2);
 
+                // Draw two identical symbols for positions a and b
+                [a, b].forEach(pos => {
 
+                    gateGroup.append('rect')
+                        .attr('x', block_width / 2 - gate_circle_radius)
+                        .attr('y', (qubit_num - 1 - pos) * wire_height + wire_height / 2 - gate_circle_radius)
+                        .attr("width", gate_circle_radius * 2)
+                        .attr("height", gate_circle_radius * 2)
+                        .attr('rx', 3)
+                        .style("stroke", "#366494")
+                        .style("stroke-width", 2)
+                        .style("fill", "#ffffff");
 
-        gates.append('circle')
-            .attr("r", gate_circle_radius)
-            .attr("cx", block_width/2)
-            .attr("cy", 0)
-            .style("stroke", "#636363")
-            .style("stroke-width", 3)
-            .style("fill", "#ffffff")
+                    gateGroup.append('text')
+                        .html(d['gate'])
+                        .attr('transform', `translate(${block_width / 2}, ${(qubit_num - 1 - pos) * wire_height + wire_height / 2 + gate_circle_radius / 2})`)
+                        .style('font-size', '0.85em')
+                        .style('font-weight', 1000)
+                        .style('font-style', 'italic')
+                        .style('text-anchor', 'middle')
+                        .style('fill', "#366494");
+                });
+            } else {
+                // Default behavior for other gates
+                gateGroup.append('rect')
+                    .attr('x', block_width / 2 - gate_circle_radius)
+                    .attr('y', (qubit_num - 1 - d['qubit']) * wire_height + wire_height / 2 - gate_circle_radius)
+                    .attr("width", gate_circle_radius * 2)
+                    .attr("height", gate_circle_radius * 2)
+                    .attr('rx', 3)
+                    .style("stroke", "#366494")
+                    .style("stroke-width", 2)
+                    .style("fill", "#ffffff");
 
-
-
-
-
-
-        gates.append('text')
-            .html(d=>d['gate'])
-            .attr('transform', `translate(${block_width/2-gate_circle_radius/2}, ${gate_circle_radius/2})`)
-            .style('font-size', '1.4em')
-            .style('font-weight', 'bold')
-            .style('font-style', 'italic')
-
-            .style('fill', "#636363")
+                gateGroup.append('text')
+                    .html(d => d['gate'])
+                    .attr('transform', `translate(${block_width / 2}, ${(qubit_num - 1 - d['qubit']) * wire_height + wire_height / 2 +5})`)
+                    .style('font-size', '0.85em')
+                    .style('font-weight', 1000)
+                    .style('font-style', 'italic')
+                    .style('text-anchor', 'middle')
+                    .style('fill', "#366494");
+            }
+        });
 
 
 
@@ -247,12 +369,13 @@ function OriginCircuit(props){
 
 
         content_g.append('g')
-            .attr('class', 'view4_axisBottom')
             .attr('transform', `translate(${0}, ${-10})`)
             .call(d3.axisTop(scale_x)
                 .tickValues(view4_data.map(d=>d['block_num']))
                 .tickFormat(d=>`Block ${d+1}`)
             )
+            .attr('font-size', '0.7em')
+
 
 
 
@@ -276,7 +399,7 @@ function OriginCircuit(props){
         //
         // // title 的 g
         // let title_g = view4.append('g')
-        //     .attr('transform', `translate(${view4_padding_left_right}, ${view4_padding_top})`)
+        //     .attr('transform', `translate(${view4_padding_left}, ${view4_padding_top})`)
         //
         //
         // title_g
@@ -321,7 +444,7 @@ function OriginCircuit(props){
 
         let file_name = param_algo
 
-        axios.get(`data/${file_name}.json`)
+        axios.get(`data/circuit-${file_name}.json`)
             // axios.get(`data/temp.json`)
             .then(res=>{
 
